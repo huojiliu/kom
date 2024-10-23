@@ -692,3 +692,12 @@ if __name__ == "__main__":
         print(str(e))
         traceback.print_exc()
         raise e
+def test_ngram_overlap_score(selector: NGramOverlapExampleSelector) -> None:
+    """Tests that ngram_overlap_score returns correct values."""
+    selector.threshold = 1.0 + 1e-9
+    none = ngram_overlap_score(["Spot can run."], ["My dog barks."])
+    some = ngram_overlap_score(["Spot can run."], ["See Spot run."])
+    complete = ngram_overlap_score(["Spot can run."], ["Spot can run."])
+
+    check = [abs(none - 0.0) < 1e-9, 0.0 < some < 1.0, abs(complete - 1.0) < 1e-9]
+    assert check == [True, True, True]
